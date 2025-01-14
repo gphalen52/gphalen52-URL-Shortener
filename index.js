@@ -82,6 +82,31 @@ async function saveData(filePath, action, input) {
   }
 }
 
+function gen_shorturl() {
+  const allData = dataManagement('load data');
+  
+  const min = 1;
+  let max = 1000;
+  
+  if (allData && allData.length > 0) {
+    max = allData.length * 1000;
+  }
+
+  let short = Math.ceil(Math.random() * (max - min + 1) + min);
+
+  if (!allData || allData.length === 0) {
+    return short;
+  }
+
+  const existingShortUrls = allData.map(d => d.short_url);
+
+  while (existingShortUrls.includes(short)) {
+    short = Math.ceil(Math.random() * (max - min + 1) + min);
+  }
+
+  return short;
+}
+
 // Your first API endpoint
 app.get('/api/hello', function(req, res) {
   res.json({ greeting: 'hello API' });
